@@ -22,34 +22,16 @@ int is_transpose(int M, int N, int A[N][M], int B[M][N]);
 char transpose_submit_desc[] = "Transpose submission";
 
 void transpose_32(int M, int N, int A[N][M], int B[M][N]){
-    /*
-        int blocksize = 8;
-        for (int row = 0; row < N; row += blocksize){
-            for (int col = 0; col < M; col += blocksize){
-                for (int i = row; i < row + blocksize && i < N; ++i){
-                    for (int j = col; j < col + blocksize && j < M; ++j){
-                        if (i != j) {
-                            //int a = A[i][j];
-                            B[j][i] = A[i][j];
-                        } 
-                    }
-                    if (row == col) {
-                        //int a = A[i][i];
-                        B[i][i] = A[i][i];
-                    }
-                }
-            }
-        }
-    */
-    int blocking = 8;
-    //use 8x8 blocks except for the diagonals
-    for(int start_row = 0; start_row < N; start_row += blocking){
-        //int row = start_row;
-        for(int start_col = 0; start_col < M; start_col += blocking){
+
+    int blocking = 8; //8x8 blocking scheme
+    
+    for(int start_row = 0; start_row < N; start_row += blocking){ //first row of a 8x8 block
+       
+        for(int start_col = 0; start_col < M; start_col += blocking){ //first column of a 8x8 block
             
-                for(int row = start_row; row < start_row + blocking; row++){
+                for(int row = start_row; row < start_row + blocking; row++){ //eaah row of a 8x8 block
                 
-                    for(int col = start_col; col < start_col + blocking; col++){
+                    for(int col = start_col; col < start_col + blocking; col++){ //each column of a 8x8 block
                         
                         if(row != col){
                             B[col][row] = A[row][col];
@@ -57,7 +39,7 @@ void transpose_32(int M, int N, int A[N][M], int B[M][N]){
                         
                     }
                     
-                    if(start_row == start_col){
+                    if(start_row == start_col){ //treat diagonals separately
                         B[row][row] = A[row][row];
                     }
                     
@@ -72,48 +54,14 @@ void transpose_32(int M, int N, int A[N][M], int B[M][N]){
 }
 
 void transpose_64(int M, int N, int A[N][M], int B[M][N]){
-    /*
-    int blocking = 4;
-   
-    //use 8x8 blocks except for the diagonals
-    for(int start_row = 0; start_row < N; start_row += blocking){
+    //8x4 blocking scheme
+    for(int start_row = 0; start_row < N; start_row += 8){ //first row of a 8x4 block
         
-        for(int start_col = 0; start_col < M; start_col += blocking){
+        for(int start_col = 0; start_col < M; start_col += 4){ //first column of a 8x4 block
 
+            for(int row = start_row; row < start_row + 8; row++){ //each row of a 8x4 block
             
-                for(int row = start_row; row < start_row + blocking; row++){
-                
-                    for(int col = start_col; col < start_col + blocking; col++){
-                        
-                        if(row != col){
-                            B[col][row] = A[row][col];
-                        }
-                        
-                    
-                        
-                    }
-                    
-                    if(start_row == start_col){
-                        B[row][row] = A[row][row];
-                    }
-                    
-                
-                
-                }
-           
-            
-        }
-        
-    }
-    */
-    
-    for(int start_row = 0; start_row < N; start_row += 8){
-        
-        for(int start_col = 0; start_col < M; start_col += 4){
-
-            for(int row = start_row; row < start_row + 8; row++){
-            
-                for(int col = start_col; col < start_col + 4; col++){
+                for(int col = start_col; col < start_col + 4; col++){ //each row of a 8x4 block
                     
                     if(row != col){
                         B[col][row] = A[row][col];
@@ -121,7 +69,7 @@ void transpose_64(int M, int N, int A[N][M], int B[M][N]){
                     
                 }
                 
-                if(start_row == start_col){
+                if(start_row == start_col){ //treat diagonal separately
                     B[row][row] = A[row][row];
                 }
                 
