@@ -1,3 +1,12 @@
+/*
+Name: Sally Lee
+Email: sallylee@wustl.edu
+Purpose: A cache simulator that takes a valgrind memory trace as input, 
+		simulates the hit/miss behavior of a cache memory on this trace, 
+		and outputs the total number of hits, misses, evictions, dirty bytes evicted, 
+		dirty bytes active in the cache, and back-to-back references to the same address within a given set.
+*/
+
 #include "cachelab.h"
 #include <getopt.h>
 #include <stdlib.h>
@@ -51,9 +60,6 @@ int main(int argc, char * argv[])
    	 }
   }
   
-
-  
-  
   
   int num_sets = (int) pow(2,s);
   
@@ -82,7 +88,11 @@ int main(int argc, char * argv[])
   int dirty_bytes_active = 0;
   int double_references = 0;
  
-
+  /*Purpose: executes the load operation
+    Arguments: tag = tag of the block that is being searched for in the cache
+			   set_index = the index of the set that is being searched in the cache
+			   blocks = the array of blocks in the set being searched
+  */
   void load(unsigned long tag, int set_index, block_t * blocks){
 	    
 		int hit = 0; // a boolean where	 miss: hit = 0
@@ -149,6 +159,13 @@ int main(int argc, char * argv[])
 
   }//end of load function definition
 
+
+
+  /*Purpose: executes the store operation
+    Arguments: tag = tag of the block that is being searched for in the cache
+			   set_index = the index of the set that is being searched in the cache
+			   blocks = the array of blocks in the set being searched
+  */
   void store(unsigned long tag, int set_index, block_t * blocks){
 
 	  		int hit = 0; // a boolean where	 miss: hit = 0

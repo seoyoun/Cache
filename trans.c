@@ -1,3 +1,10 @@
+/*
+Name: Sally Lee
+Email: sallylee@wustl.edu
+Purpose: defines a transpose function that causes as few cache misses as possible.
+*/
+
+
 /* 
  * trans.c - Matrix transpose B = A^T
  *
@@ -7,6 +14,7 @@
  * A transpose function is evaluated by counting the number of misses
  * on a 1KB direct mapped cache with a block size of 32 bytes.
  */ 
+ 
 #include <stdio.h>
 #include "cachelab.h"
 
@@ -21,6 +29,16 @@ int is_transpose(int M, int N, int A[N][M], int B[M][N]);
  */
 char transpose_submit_desc[] = "Transpose submission";
 
+
+
+/*
+Purpose: transposes 32x32 matrix
+Arguments: M = number of columns in A
+           N = number of rows in B
+           A = NxM matrix
+           B = MxN matrix
+           A is transposed into B
+*/
 void transpose_32(int M, int N, int A[N][M], int B[M][N]){
 
     int blocking = 8; //8x8 blocking scheme
@@ -53,6 +71,14 @@ void transpose_32(int M, int N, int A[N][M], int B[M][N]){
     }
 }
 
+/*
+Purpose: transposes 64x64 matrix
+Arguments: M = number of columns in A
+           N = number of rows in B
+           A = NxM matrix
+           B = MxN matrix
+           A is transposed into B
+*/
 void transpose_64(int M, int N, int A[N][M], int B[M][N]){
     //8x4 blocking scheme
     for(int start_row = 0; start_row < N; start_row += 8){ //first row of a 8x4 block
@@ -78,13 +104,18 @@ void transpose_64(int M, int N, int A[N][M], int B[M][N]){
         }
         
     }
-
-
-
-    
 }
 
-//transpose function for 61x67 matrix
+
+
+/*
+Purpose: transposes 61x67 matrix
+Arguments: M = number of columns in A
+           N = number of rows in B
+           A = NxM matrix
+           B = MxN matrix
+           A is transposed into B
+*/
 void transpose_61(int M, int N, int A[N][M], int B[M][N]){
 
     int blocking = 14; //will transpose 14 blocks at a time
@@ -109,6 +140,14 @@ void transpose_61(int M, int N, int A[N][M], int B[M][N]){
     }
 }
 
+/*
+Purpose: transpose function for all three sizes of matrices
+Arguments: M = number of columns in A
+           N = number of rows in B
+           A = NxM matrix
+           B = MxN matrix
+           A is transposed into B
+*/
 void transpose_submit(int M, int N, int A[N][M], int B[M][N])
 {
     if(M == 32){
