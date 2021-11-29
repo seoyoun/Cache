@@ -1,0 +1,27 @@
+Grade from driver.py: 124.7/130
+
+driver.py output summary:
+Cache Lab summary:
+                        Points   Max pts      Misses
+Csim correctness          90.0        90
+Trans perf 32x32          16.0        16         284
+Trans perf 64x64           2.7         8        1768
+Trans perf 61x67          16.0        16        1993
+          Total points   124.7       130
+NOTE: there is an additional max 10 style points.
+
+
+Style Grade: 7/10
+-1: line 291 over 80 chars
+-2: return values are magic numbers as they indicate the state your program exits in; setting dirty/valid bits to 1/0, 1/0 are magic numbers as they indicate the state of your cache line; whenever you index into an array with a constant index, that index is a magic number as it corresponds to a special element in that array (i.e. line 236); -1 on line 47 is a magic number as it indicates we have no more arguments left to parse
+
+Style Comments:
+- make sure your comments don't exceed 80 chars either
+- use the \ delimiter to split up Long lines
+- use #define constants for your magic numbers, i.e. #define DIRTY 1, #define CLEAN 0, or for return values #define SUCCESS 0, #define BAD_ALLOC -1, #define BAD_FOPEN -2, etc. Essentially, whenever you use a constant in your code, think "can I make this more readable by naming it with a #define constant." For example on line 109, you could have done if (i == MRU), where #define MRU 0
+- make sure you have a unique non-zero return value for each kind of error you may encounter in the program
+- nice file header, great function headers!
+- put your function declarations at the top of the file, implement them at the bottom
+- make sure you don't forget to return after an error occurs, i.e. on line 281 if you can't open the trace file
+
+Total Lab4 Grade: 131.7/140
